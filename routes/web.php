@@ -29,3 +29,8 @@ Route::post('/participate', [ParticipatesController::class, 'store'])->name('par
 Route::get('/thanks', function () {
     return view('thanks');
 })->name('thanks'); // Thank You page
+
+// Google Calendar Integration Routes
+Route::get('/google/redirect', [ParticipatesController::class, 'redirectToGoogle'])->name('google.redirect'); // Redirect to Google OAuth
+Route::get('/google/callback', [ParticipatesController::class, 'handleGoogleCallback'])->name('google.callback'); // Google OAuth callback
+Route::get('/add-to-google-calendar', [ParticipatesController::class, 'addEventToGoogleCalendar'])->name('google.addEvent');
