@@ -59,10 +59,15 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <!-- Dashboard Link -->
+                    <a href="" class="nav-item nav-link active">
+                        <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                
+                    <!-- Logout Link -->
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-link nav-item nav-link text-white p-0">
+                        <button type="submit" class="nav-item nav-link btn btn-link text-white p-0" >
                             <i class="fa fa-keyboard me-2"></i>Logout
                         </button>
                     </form>
@@ -162,7 +167,7 @@
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Total Participants</p>
-                                <h6 class="mb-0">1234</h6>
+                                <h6 class="mb-0">{{ $totalParticipants }}</h6>
                             </div>
                         </div>
                     </div>

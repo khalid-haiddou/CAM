@@ -142,7 +142,10 @@ class ParticipatesController extends Controller
     public function dashboard()
     {
     $participants = Participate::all(); // Fetch all participants
-    return view('dashboard', compact('participants'));
+    
+    $totalParticipants = Participate::count(); // Count total participants
+    $participants = Participate::all(); // Fetch all participants
+    return view('dashboard', compact('participants', 'totalParticipants'));
     }
     public function edit($id)
     {
@@ -173,7 +176,12 @@ class ParticipatesController extends Controller
 
     return redirect()->route('dashboard')->with('message', 'Participant deleted successfully!');
 }
-
+public function total()
+{
+    $totalParticipants = Participate::count(); // Count total participants
+    $participants = Participate::all(); // Fetch all participants
+    return view('dashboard', compact('participants', 'totalParticipants'));
+}
 
 
 }
