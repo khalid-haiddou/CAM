@@ -144,4 +144,36 @@ class ParticipatesController extends Controller
     $participants = Participate::all(); // Fetch all participants
     return view('dashboard', compact('participants'));
     }
+    public function edit($id)
+    {
+    $participant = Participate::findOrFail($id);
+    return view('edit-participant', compact('participant'));
+    }
+
+    public function update(Request $request, $id)
+    {
+    $participant = Participate::findOrFail($id);
+
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|unique:participates,email,' . $id,
+        'phone' => 'required|string|max:15',
+    ]);
+
+    $participant->update($request->all());
+
+    return redirect()->route('dashboard')->with('message', 'Participant updated successfully!');
+    }
+
+    public function destroy($id)
+{
+    $participant = Participate::findOrFail($id);
+    $participant->delete();
+
+    return redirect()->route('dashboard')->with('message', 'Participant deleted successfully!');
+}
+
+
+
 }

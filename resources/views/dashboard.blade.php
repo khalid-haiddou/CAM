@@ -46,7 +46,7 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Nextbridgee</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -225,41 +225,50 @@
 
 
             <!-- Sales Chart Start -->
-            <div class="container-fluid pt-4 px-4">  
-                <div class="container mt-5">
-                    <h2 class="text-center mb-4">Dashboard Statistics</h2>
-                    <table class="table table-striped table-bordered">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>Statistic</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Total Participants</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>New Participants (This Month)</td>
-                                <td>120</td>
-                            </tr>
-                            <tr>
-                                <td>Events Conducted</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>Participants Who Synced with Google Calendar</td>
-                                <td>200</td>
-                            </tr>
-                            <tr>
-                                <td>Average Event Rating</td>
-                                <td>4.7 / 5</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Participants</h2>
+        <table class="table table-striped table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($participants as $participant)
+                    <tr>
+                        <td style="color: white;">{{ $loop->iteration }}</td>
+                        <td style="color: white;">{{ $participant->first_name }}</td>
+                        <td style="color: white;">{{ $participant->last_name }}</td>
+                        <td style="color: white;">{{ $participant->email }}</td>
+                        <td style="color: white;">{{ $participant->phone }}</td>
+                        <td>
+                            <!-- Update Button -->
+                            <a href="{{ route('participate.edit', $participant->id) }}" class="btn btn-sm btn-warning">
+                                Update
+                            </a>
+                            <!-- Delete Form -->
+                            <form action="{{ route('participate.delete', $participant->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this participant?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">No participants found</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
             <!-- Sales Chart End -->
 
 
