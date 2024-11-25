@@ -16,12 +16,13 @@ Route::middleware(['auth'])->group(function () {
         return view('home');
     })->name('home');
 
+    Route::get('/dashboard', [ParticipatesController::class, 'dashboard'])->name('dashboard');
 
+    // Participation Routes (CRUD)
+    Route::get('/participate/{id}/edit', [ParticipatesController::class, 'edit'])->name('participate.edit'); // Show edit form
+    Route::put('/participate/{id}', [ParticipatesController::class, 'update'])->name('participate.update'); // Handle update
+    Route::delete('/participate/{id}', [ParticipatesController::class, 'destroy'])->name('participate.delete'); // Handle delete
 });
-Route::get('/dashboard', [ParticipatesController::class, 'dashboard'])->name('dashboard');
-Route::get('/participate/{id}/edit', [ParticipatesController::class, 'edit'])->name('participate.edit'); // Show edit form
-Route::put('/participate/{id}', [ParticipatesController::class, 'update'])->name('participate.update'); // Handle update
-Route::delete('/participate/{id}', [ParticipatesController::class, 'destroy'])->name('participate.delete'); // Handle delete
 
 // Participation Routes
 Route::get('/participate', [ParticipatesController::class, 'index'])->name('participate.form'); // Show participation form
