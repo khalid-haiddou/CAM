@@ -176,7 +176,7 @@
                             <i class="fa fa-chart-bar fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">New</p>
-                                <h6 class="mb-0">15</h6>
+                                <h6 class="mb-0">3</h6>
                             </div>
                         </div>
                     </div>
