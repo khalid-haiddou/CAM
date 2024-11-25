@@ -138,4 +138,10 @@ class ParticipatesController extends Controller
         $client->addScope(Google_Service_Calendar::CALENDAR);
         return $client;
     }
+
+    public function dashboard()
+    {
+    $participants = Participate::all(); // Fetch all participants
+    return view('dashboard', compact('participants'));
+    }
 }
