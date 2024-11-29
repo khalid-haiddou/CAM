@@ -247,6 +247,10 @@
                 @endforelse
             </tbody>
         </table>
+        <form action="" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-primary">Reminder</button>
+        </form>
     </div>
             <!-- Sales Chart End -->
 
@@ -302,6 +306,8 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
+    
+    
 </body>
 
 </html>
