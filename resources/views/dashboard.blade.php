@@ -247,10 +247,10 @@
                 @endforelse
             </tbody>
         </table>
-        <form action="" method="POST">
+        <form action="{{ route('send.reminder') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-primary">Reminder</button>
-        </form>
+        </form>        
     </div>
             <!-- Sales Chart End -->
 

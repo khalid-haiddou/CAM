@@ -8,6 +8,7 @@ use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventDateTime;
 use Illuminate\Http\Request;
 use App\Models\Participate;
+use Illuminate\Support\Facades\Mail;
 
 class ParticipatesController extends Controller
 {
@@ -181,6 +182,20 @@ public function total()
     $totalParticipants = Participate::count(); // Count total participants
     $participants = Participate::all(); // Fetch all participants
     return view('dashboard', compact('participants', 'totalParticipants'));
+}
+
+public function sendReminder()
+{
+    $participants = \App\Models\Participate::all();
+
+    foreach ($participants as $participant) {
+        Mail::send('emails.reminder', ['participant' => $participant], function ($message) use ($participant) {
+            $message->to($participant->email)
+                    ->subject('Reminder: Upcoming Event');
+        });
+    }
+
+    return redirect()->route('dashboard')->with('message', 'Reminder emails sent successfully!');
 }
 
 

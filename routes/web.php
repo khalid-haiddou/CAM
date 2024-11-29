@@ -36,3 +36,4 @@ Route::get('/thanks', function () {
 Route::get('/google/redirect', [ParticipatesController::class, 'redirectToGoogle'])->name('google.redirect'); // Redirect to Google OAuth
 Route::get('/google/callback', [ParticipatesController::class, 'handleGoogleCallback'])->name('google.callback'); // Google OAuth callback
 Route::get('/add-to-google-calendar', [ParticipatesController::class, 'addEventToGoogleCalendar'])->name('google.addEvent');
+Route::post('/send-reminder', [ParticipatesController::class, 'sendReminder'])->name('send.reminder');
