@@ -211,6 +211,10 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Participants</h2>
         <table id="participantsTable" class="table table-striped table-bordered">
+            <!-- New Participant Button -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newParticipantModal">
+                New Participant
+            </button>
             <thead class="table-primary">
                 <tr>
                     <th>ID</th>
@@ -231,9 +235,18 @@
                         <td style="color: white;">{{ $participant->phone }}</td>
                         <td>
                             <!-- Update Button -->
-                            <a href="{{ route('participate.edit', $participant->id) }}" class="btn btn-sm btn-warning">
+                            <a href="#" 
+                                class="btn btn-sm btn-warning" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editParticipantModal" 
+                                data-id="{{ $participant->id }}"
+                                data-first_name="{{ $participant->first_name }}"
+                                data-last_name="{{ $participant->last_name }}"
+                                data-email="{{ $participant->email }}"
+                                data-phone="{{ $participant->phone }}">
                                 Update
                             </a>
+
                             <!-- Delete Form -->
                             <form action="{{ route('participate.delete', $participant->id) }}" method="POST" class="d-inline">
                                 @csrf
@@ -258,6 +271,77 @@
         </form>        
     </div>
             <!-- Sales Chart End -->
+
+<!-- Modal for Adding New Participant -->
+<div class="modal fade" id="newParticipantModal" tabindex="-1" aria-labelledby="newParticipantModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('participate.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="is_admin" value="true"> <!-- Hidden field to indicate admin action -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+            <!-- Edit Participant Modal -->
+<div class="modal fade" id="editParticipantModal" tabindex="-1" aria-labelledby="editParticipantModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editParticipantForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editParticipantModalLabel">Edit Participant</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="first_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="last_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPhone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="editPhone" name="phone" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
             <!-- Recent Sales Start -->
@@ -326,6 +410,32 @@
                 "searching": true,
                 "ordering": true,
                 "info": true
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editModal = document.getElementById('editParticipantModal');
+            const editForm = document.getElementById('editParticipantForm');
+    
+            editModal.addEventListener('show.bs.modal', (event) => {
+                const button = event.relatedTarget;
+    
+                // Retrieve participant data from the button
+                const id = button.getAttribute('data-id');
+                const firstName = button.getAttribute('data-first_name');
+                const lastName = button.getAttribute('data-last_name');
+                const email = button.getAttribute('data-email');
+                const phone = button.getAttribute('data-phone');
+    
+                // Update the modal fields
+                document.getElementById('editFirstName').value = firstName;
+                document.getElementById('editLastName').value = lastName;
+                document.getElementById('editEmail').value = email;
+                document.getElementById('editPhone').value = phone;
+    
+                // Update the form action
+                editForm.action = `/participate/update/${id}`;
             });
         });
     </script>

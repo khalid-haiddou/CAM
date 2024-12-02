@@ -20,23 +20,30 @@ class ParticipatesController extends Controller
 
     // Store participant information
     public function store(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:participates,email',
-            'phone' => 'required|string|max:15',
-        ]);
+{
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|unique:participates,email',
+        'phone' => 'required|string|max:15',
+    ]);
 
-        Participate::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
+    Participate::create([
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+    ]);
 
-        return redirect()->route('thanks');
+    // Check if the request is from the admin (dashboard)
+    if ($request->has('is_admin') && $request->input('is_admin') == true) {
+        return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
     }
+
+    // Default behavior for regular users
+    return redirect()->route('thanks');
+}
+
 
     // Redirect to Google OAuth
     public function redirectToGoogle()
