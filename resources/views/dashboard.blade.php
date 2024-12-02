@@ -29,6 +29,13 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- Optional Bootstrap Styling for DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
 </head>
 
 <body>
@@ -87,9 +94,6 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control bg-dark border-0" type="search" placeholder="Search">
-                </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -206,7 +210,7 @@
             <!-- Sales Chart Start -->
     <div class="container mt-5">
         <h2 class="text-center mb-4">Participants</h2>
-        <table class="table table-striped table-bordered">
+        <table id="participantsTable" class="table table-striped table-bordered">
             <thead class="table-primary">
                 <tr>
                     <th>ID</th>
@@ -247,6 +251,7 @@
                 @endforelse
             </tbody>
         </table>
+        
         <form action="{{ route('send.reminder') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-primary">Reminder</button>
@@ -306,7 +311,26 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <!-- Optional Bootstrap Integration -->
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#participantsTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+        });
+    </script>
     
+
     
 </body>
 
