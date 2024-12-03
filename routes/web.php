@@ -13,10 +13,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // Ha
 
 // Routes secured for authenticated users
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('home');
-    })->name('home');
-
     Route::get('/dashboard', [ParticipatesController::class, 'dashboard'])->name('dashboard');
 
     // Participation Routes (CRUD)
@@ -42,3 +38,6 @@ Route::get('/add-to-google-calendar', [ParticipatesController::class, 'addEventT
 // Reminder Emails
 Route::post('/send-reminder', [ParticipatesController::class, 'sendReminder'])->name('send.reminder');
 Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+Route::get('/', function () {
+    return view('index');
+})->name('index');
