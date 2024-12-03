@@ -9,6 +9,7 @@ use Google_Service_Calendar_EventDateTime;
 use Illuminate\Http\Request;
 use App\Models\Participate;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Notification;
 
 class ParticipatesController extends Controller
 {
@@ -20,29 +21,38 @@ class ParticipatesController extends Controller
 
     // Store participant information
     public function store(Request $request)
-{
-    $request->validate([
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'email' => 'required|email|unique:participates,email',
-        'phone' => 'required|string|max:15',
-    ]);
-
-    Participate::create([
-        'first_name' => $request->first_name,
-        'last_name' => $request->last_name,
-        'email' => $request->email,
-        'phone' => $request->phone,
-    ]);
-
-    // Check if the request is from the admin (dashboard)
-    if ($request->has('is_admin') && $request->input('is_admin') == true) {
-        return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:participates,email',
+            'phone' => 'required|string|max:15',
+        ]);
+    
+        Participate::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+    
+        // Add a new notification
+        Notification::create([
+            'type' => 'new_participant',
+            'data' => json_encode([
+                'message' => 'A new participant has registered.',
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'time' => now()->diffForHumans(),
+            ]),
+        ]);
+    
+        // Redirect accordingly
+        if (auth()->check() && auth()->user()->is_admin) {
+            return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
+        }
+    
+        return redirect()->route('thanks');
     }
-
-    // Default behavior for regular users
-    return redirect()->route('thanks');
-}
 
 
     // Redirect to Google OAuth
@@ -148,13 +158,13 @@ class ParticipatesController extends Controller
     }
 
     public function dashboard()
-    {
-    $participants = Participate::all(); // Fetch all participants
-    
-    $totalParticipants = Participate::count(); // Count total participants
-    $participants = Participate::all(); // Fetch all participants
-    return view('dashboard', compact('participants', 'totalParticipants'));
-    }
+{
+    $participants = Participate::all();
+    $totalParticipants = Participate::count();
+    $notifications = Notification::latest()->take(5)->get(); // Fetch the latest 5 notifications
+
+    return view('dashboard', compact('participants', 'totalParticipants', 'notifications'));
+}
     public function edit($id)
     {
     $participant = Participate::findOrFail($id);

@@ -96,10 +96,6 @@
                 </a>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Message</span>
-                        </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
@@ -137,27 +133,26 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
+                            <span class="d-none d-lg-inline-flex">Notifications</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                            @forelse($notifications as $notification)
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">{{ json_decode($notification->data)->message }}</h6>
+                                    <small>{{ json_decode($notification->data)->time }}</small>
+                                </a>
+                                <hr class="dropdown-divider">
+                            @empty
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">No new notifications</h6>
+                                </a>
+                            @endforelse
+                            <form method="POST" action="{{ route('notifications.read') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-center">Mark all as read</button>
+                            </form>                            
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             </nav>
             <!-- Navbar End -->

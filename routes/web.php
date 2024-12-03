@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ParticipatesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginRegister'])->name('login'); // Show login/register form
@@ -40,3 +41,4 @@ Route::get('/add-to-google-calendar', [ParticipatesController::class, 'addEventT
 
 // Reminder Emails
 Route::post('/send-reminder', [ParticipatesController::class, 'sendReminder'])->name('send.reminder');
+Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
