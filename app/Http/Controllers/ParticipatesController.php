@@ -21,38 +21,41 @@ class ParticipatesController extends Controller
 
     // Store participant information
     public function store(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:participates,email',
-            'phone' => 'required|string|max:15',
-        ]);
-    
-        Participate::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
-    
-        // Add a new notification
-        Notification::create([
-            'type' => 'new_participant',
-            'data' => json_encode([
-                'message' => 'A new participant has registered.',
-                'name' => $request->first_name . ' ' . $request->last_name,
-                'time' => now()->diffForHumans(),
-            ]),
-        ]);
-    
-        // Redirect accordingly
-        if (auth()->check() && auth()->user()->is_admin) {
-            return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
-        }
-    
-        return redirect()->route('thanks');
+{
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|unique:participates,email',
+        'phone' => 'required|string|size:10|regex:/^[0-9]+$/',
+    ]);
+
+    // Create the participant
+    Participate::create([
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+    ]);
+
+    // Add a new notification
+    Notification::create([
+        'type' => 'new_participant',
+        'data' => json_encode([
+            'message' => 'A new participant has registered.',
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'time' => now()->diffForHumans(),
+        ]),
+    ]);
+
+    // Redirect accordingly
+    if (auth()->check() && auth()->user()->isAdmin()) {
+        // Admin is adding a participant, redirect to dashboard
+        return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
     }
+
+    // Regular user is participating, redirect to the thanks page
+    return redirect()->route('thanks');
+}
 
 
     // Redirect to Google OAuth
