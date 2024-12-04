@@ -221,5 +221,4 @@ public function sendReminder()
     return redirect()->route('dashboard')->with('message', 'Reminder emails sent successfully!');
 }
 
-
 }
