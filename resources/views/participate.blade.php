@@ -26,12 +26,12 @@
             <form action="{{ route('participate.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name:</label>
+                    <label for="first_name" class="form-label">Prénom :</label>
                     <input type="text" name="first_name" id="first_name" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="last_name" class="form-label">Last Name:</label>
+                    <label for="last_name" class="form-label">Nom :</label>
                     <input type="text" name="last_name" id="last_name" class="form-control" required>
                 </div>
 
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="phone" class="form-label">Phone:</label>
+                    <label for="phone" class="form-label">Téléphone :</label>
                     <input type="text" name="phone" id="phone" class="form-control" required>
                 </div>
 

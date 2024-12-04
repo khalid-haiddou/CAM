@@ -38,25 +38,27 @@ class AuthController extends Controller
 
     // Handle login
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:8',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
 
-            // Redirect based on role
-            return Auth::user()->role === 'admin'
-                ? redirect()->route('dashboard')
-                : redirect()->route('home');
+        // Redirect the user to the appropriate page
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('dashboard'); // Admin goes to the dashboard
+        } else {
+            return redirect()->route('index'); // Regular users go to the index page
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
     }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ]);
+}
 
     // Handle logout
     public function logout(Request $request)
