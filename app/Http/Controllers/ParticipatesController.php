@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Participate;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Notification;
+use App\Mail\ParticipationConfirmation;
 
 class ParticipatesController extends Controller
 {
@@ -30,7 +31,7 @@ class ParticipatesController extends Controller
     ]);
 
     // Create the participant
-    Participate::create([
+    $participant = Participate::create([
         'first_name' => $request->first_name,
         'last_name' => $request->last_name,
         'email' => $request->email,
@@ -42,18 +43,20 @@ class ParticipatesController extends Controller
         'type' => 'new_participant',
         'data' => json_encode([
             'message' => 'A new participant has registered.',
-            'name' => $request->first_name . ' ' . $request->last_name,
+            'name' => $participant->first_name . ' ' . $participant->last_name,
             'time' => now()->diffForHumans(),
         ]),
     ]);
 
+    // Send email to the specified addresses
+    $recipients = ['khalid@paninidesign.com'];
+    Mail::to($recipients)->send(new ParticipationConfirmation($participant));
+
     // Redirect accordingly
     if (auth()->check() && auth()->user()->isAdmin()) {
-        // Admin is adding a participant, redirect to dashboard
         return redirect()->route('dashboard')->with('message', 'Participant added successfully!');
     }
 
-    // Regular user is participating, redirect to the thanks page
     return redirect()->route('thanks');
 }
 
