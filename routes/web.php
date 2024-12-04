@@ -11,24 +11,16 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('doLogin'); // Handle login
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // Handle logout
 
-// Index Page
-Route::get('/', function () {
-    return view('index');
-})->name('index');
-
 // Routes secured for authenticated users
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [ParticipatesController::class, 'dashboard'])->name('dashboard');
+
     // Participation Routes (CRUD)
     Route::get('/participate/{id}/edit', [ParticipatesController::class, 'edit'])->name('participate.edit'); // Show edit form
     Route::put('/participate/update/{id}', [ParticipatesController::class, 'update'])->name('participate.update'); // Handle update
     Route::delete('/participate/{id}', [ParticipatesController::class, 'destroy'])->name('participate.delete'); // Handle delete
 });
-
-// Routes secured for admin users
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [ParticipatesController::class, 'dashboard'])->name('dashboard');
-});
-
+Route::post('/participate', [ParticipatesController::class, 'store'])->name('participate.store');
 // Participation Routes
 Route::get('/participate', [ParticipatesController::class, 'index'])->name('participate.form'); // Show participation form
 Route::post('/participate', [ParticipatesController::class, 'store'])->name('participate.store'); // Handle form submission
@@ -46,3 +38,6 @@ Route::get('/add-to-google-calendar', [ParticipatesController::class, 'addEventT
 // Reminder Emails
 Route::post('/send-reminder', [ParticipatesController::class, 'sendReminder'])->name('send.reminder');
 Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+Route::get('/', function () {
+    return view('index');
+})->name('index');
